@@ -65,4 +65,42 @@ const bookingModel = {
             throw new Error("Error saat update status booking: " + error.message);
         }
     },
+
+    cancelBooking: async (id) => {
+        try {
+            const sql = "UPDATE booking SET status = 'cancelled' WHERE id = ?";
+            const result = await query(sql, [id]);
+            if (result.affectedRows === 0) {
+                throw new Error("Booking tidak ditemukan");
+            } 
+            return { id, status: 'cancelled'};
+        } catch (error) {
+            throw new Error("Error memnbatalkan booking: " + error.message);            
+        }
+    },
+
+    deleteBooking: async (id) => {
+        try {
+            const sql = "DELETE FROM booking WHERE id = ?";
+            const result = await query(sql, [id]);
+            if (result.affectedRows === 0) {
+                throw new Error("Booking tidak ditemukan");
+            }
+            return { id, status: 'deleted'};
+        } catch (error) {
+            throw new Error("Error menghapus booking: " + error.message);
+        }
+    },
+
+    checkExistingBooking: async (user_id, pakar_id, date, time) => {
+        try {
+            const sql = "SELECT id FROM booking WHERE user_id = ? AND pakar_id = ? AND date = ? AND time = ?";
+            const result = await query(sql, [user_id, pakar_id, date, time]);
+            return result.length > 0;            
+        } catch (error) {
+            throw new Error("Error mengecek keberadaan booking: " + error.message);
+        }
+    },
 }
+
+export default bookingModel;
