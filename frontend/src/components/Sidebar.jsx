@@ -26,7 +26,10 @@ const Sidebar = () => {
           isExpanded ? "justify-between" : "justify-center"
         } items-center`}
       >
-        <img src="./logo-wtext.svg" className={`max-w-36 ${isExpanded ? "block" : "hidden"}`} />
+        <img
+          src="./logo-wtext.svg"
+          className={`max-w-36 ${isExpanded ? "block" : "hidden"}`}
+        />
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="focus:outline-none"
@@ -46,7 +49,7 @@ const Sidebar = () => {
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <DashboardIcon fontSize="small" className="me-2" />
-              <span className={`${isExpanded ? "block" : "hidden"}`}>
+              <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
                 Dashboard
               </span>
             </Link>
@@ -57,8 +60,8 @@ const Sidebar = () => {
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <BadgeIcon fontSize="small" className="me-2" />
-              <span className={`${isExpanded ? "block" : "hidden"}`}>
-                User Management
+              <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
+                Manajemen Pengguna
               </span>
             </Link>
           </li>
@@ -71,8 +74,8 @@ const Sidebar = () => {
                 className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left"
               >
                 <SchoolIcon fontSize="small" className="me-2" />
-                <span className={`${isExpanded ? "block" : "hidden"}`}>
-                  Education Management
+                <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
+                  Manajemen Edukasi
                 </span>
                 {isExpanded &&
                   (isEducationSubmenuOpen ? (
@@ -89,7 +92,7 @@ const Sidebar = () => {
                       className="flex items-center p-2 hover:bg-gray-700 rounded"
                     >
                       <i className="fas fa-book me-2"></i>
-                      <span>Courses</span>
+                      <span>Kursus</span>
                     </Link>
                   </li>
                   <li className="mb-2">
@@ -98,7 +101,7 @@ const Sidebar = () => {
                       className="flex items-center p-2 hover:bg-gray-700 rounded"
                     >
                       <i className="fas fa-chalkboard-teacher me-2"></i>
-                      <span>Modules</span>
+                      <span>Modul</span>
                     </Link>
                   </li>
                   <li className="mb-2">
@@ -107,7 +110,7 @@ const Sidebar = () => {
                       className="flex items-center p-2 hover:bg-gray-700 rounded"
                     >
                       <i className="fas fa-user-graduate me-2"></i>
-                      <span>Students</span>
+                      <span>Peserta</span>
                     </Link>
                   </li>
                 </ul>
@@ -120,8 +123,8 @@ const Sidebar = () => {
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <QuestionAnswerIcon fontSize="small" className="me-2" />
-              <span className={`${isExpanded ? "block" : "hidden"}`}>
-                Consultation Management
+              <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
+                Manajemen Konsultasi
               </span>
             </Link>
           </li>
@@ -131,8 +134,8 @@ const Sidebar = () => {
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <GroupsIcon fontSize="small" className="me-2" />
-              <span className={`${isExpanded ? "block" : "hidden"}`}>
-                Community Management
+              <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
+                Manajemen Komunitas
               </span>
             </Link>
           </li>

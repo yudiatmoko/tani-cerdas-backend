@@ -8,7 +8,7 @@ const Module = () => {
   return (
     <>
         <EducationHeader
-          title="Module"
+          title="Daftar Modul"
           onclick={() => navigate("/modules/add")}
         />
         <ModuleTable />

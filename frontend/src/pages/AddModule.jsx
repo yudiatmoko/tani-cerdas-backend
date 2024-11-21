@@ -10,7 +10,7 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
   <div className="space-y-2">
     <div>
       <label className="block text-base font-normal text-black">
-        Nama Submodule
+        Nama Submodul
       </label>
       <input
         type="text"
@@ -23,7 +23,7 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
     </div>
     <div>
       <label className="block text-base font-normal text-black">
-        Isi Submodule
+        Isi Submodul
       </label>
       <textarea
         name="content"
@@ -120,7 +120,7 @@ const AddModule = () => {
             htmlFor="title"
             className="block text-base font-normal text-black"
           >
-            Nama Module
+            Nama Modul
           </label>
           <input
             type="text"
@@ -134,7 +134,7 @@ const AddModule = () => {
         </div>
 
         <h3 className="font-bold text-base text-black font-lg mt-4">
-          Submodules
+          Submodul
         </h3>
         {moduleData.submodules.map((submodule, index) => (
           <SubmoduleForm

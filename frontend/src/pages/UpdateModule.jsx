@@ -8,7 +8,7 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
   <div className="space-y-2">
     <div>
       <label className="block text-base font-normal text-black">
-        Nama Submodule
+        Nama Submodul
       </label>
       <input
         type="text"
@@ -21,7 +21,7 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
     </div>
     <div>
       <label className="block text-base font-normal text-black">
-        Isi Submodule
+        Isi Submodul
       </label>
       <textarea
         name="content"
@@ -107,7 +107,7 @@ const UpdateModule = () => {
     <>
       <div className="flex justify-start items-center gap-2 mb-8">
         <ArrowBackIosIcon fontSize="small" onClick={() => navigate(-1)} />
-        <h2 className="text-xl font-bold">Update Modul</h2>
+        <h2 className="text-xl font-bold">Edit Modul</h2>
       </div>
       {error && <Alert message={error} type="error" />}
       {success && <Alert message={success} type="success" />}
@@ -119,7 +119,7 @@ const UpdateModule = () => {
             htmlFor="title"
             className="block text-base font-normal text-black"
           >
-            Nama Module
+            Nama Modul
           </label>
           <input
             type="text"
@@ -133,7 +133,7 @@ const UpdateModule = () => {
         </div>
 
         <h3 className="font-bold text-base text-black font-lg mt-4">
-          Submodules
+          Submodul
         </h3>
         {moduleData.submodules.map((submodule, index) => (
           <SubmoduleForm

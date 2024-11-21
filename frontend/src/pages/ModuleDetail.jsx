@@ -45,7 +45,7 @@ const ModuleDetail = () => {
       {moduleData && (
         <div>
           <h3 className="text-lg font-bold">{moduleData.title}</h3>
-          <h4 className="mt-4 font-semibold">Submodules</h4>
+          <h4 className="mt-4 font-semibold">Submodul</h4>
           <ul className="list-disc ml-5">
             {moduleData.submodules.map((submodule) => (
               <li key={submodule.id}>
