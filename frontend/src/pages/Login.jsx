@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -16,15 +16,15 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-        const response = await axios.post('http://localhost:3000/auth/login', { username, password });
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard');
-      } catch (error) {
-        alert('Login failed: ' + error.response.data.message);
-      }
-  }
+    // e.preventDefault();
+    // try {
+    //     const response = await axios.post('http://localhost:3000/auth/login', { username, password });
+    //     localStorage.setItem('token', response.data.token);
+    //   } catch (error) {
+    //     alert('Login failed: ' + error.response.data.message);
+    //   }
+    navigate("/dashboard");
+  };
 
   return (
     <>
@@ -39,7 +39,7 @@ const Login = () => {
           <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl">
-                Administrator
+                Login
               </h1>
               <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                 <div>
@@ -50,14 +50,13 @@ const Login = () => {
                     Alamat Email
                   </label>
                   <input
-                  
                     type="email"
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="nama@example.com"
                     onChange={(e) => setUsername(e.target.value)}
-                    required
+                    // required
                   />
                 </div>
                 <div>
@@ -75,7 +74,7 @@ const Login = () => {
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       onChange={(e) => setPassword(e.target.value)}
-                      required
+                      // required
                     />
                     <button
                       type="button"

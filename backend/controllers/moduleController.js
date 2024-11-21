@@ -57,7 +57,7 @@ const handleAddModule = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const existingModule = await moduleModel.getModuleById(title);
+    const existingModule = await moduleModel.getModuleByTitle(title);
     if (existingModule.length > 0) {
       return res.status(400).json({ message: "Module already exist" });
     }

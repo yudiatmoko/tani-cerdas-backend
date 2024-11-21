@@ -36,7 +36,7 @@ const addModule = async (title, submodules) => {
       );
     }
 
-    setSubmodulesNum(moduleId)
+    setSubmodulesNum(moduleId);
     return { moduleId, status: true };
   } catch (error) {
     throw error;
@@ -54,6 +54,16 @@ const setSubmodulesNum = async (moduleId) => {
     WHERE id = ?`,
     [moduleId, moduleId]
   );
+};
+
+const getModuleByTitle = async (title) => {
+  try {
+    const sql = `SELECT * FROM module WHERE title = ?`;
+    const rows = await query(sql, [title]);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getModuleById = async (id) => {
@@ -106,7 +116,7 @@ const updateModuleById = async (moduleId, title, submodules) => {
 const deleteModuleById = async (id) => {
   try {
     const result = await query("DELETE FROM module WHERE id = ?", [id]);
-    setSubmodulesNum(id)
+    setSubmodulesNum(id);
     return result;
   } catch (error) {
     throw error;
@@ -119,4 +129,5 @@ export default {
   getModuleById,
   updateModuleById,
   deleteModuleById,
+  getModuleByTitle
 };
