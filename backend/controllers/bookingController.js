@@ -1,47 +1,47 @@
 import bookingModel from "../models/bookingModel.js";
 
-export const handleCreateBooking = async (req, res) => {
+const handleCreateBooking = async (req, res) => {
     const { pakar_id, date, time } = req.body;
     const user_id = req.user.id;
 
     try {
-        const result = await bookingModel.handleCreateBooking({ user_id, pakar_id, date, time });
-        res.status(201).json({ message: "Bookin berhasil dibuat", data: result});
+        const result = await bookingModel.addBooking({ user_id, pakar_id, date, time });
+        res.status(201).json({ message: "Booking berhasil dibuat", data: result });
     } catch (error) {
         res.status(500).json({ message: "Booking gagal dibuat", error: error.message });
     }
 };
 
-export const handleGetAllBookings = async (req, res) => {
+const handleGetAllBookings = async (req, res) => {
     try {
-        const bookings = await bookingModel.handleGetAllBookings();
-        res.status(200).json({ message: "Booking berhasil ditampilkan", data: bookings});
-    } catch (error) {
-        res.status(500).json({ message: "Booking gagal ditampilkan", error: error,message });
-    }
-}
-
-export const handleGetBookingById = async (req, res) => {
-    const {id} = req.params;
-    const {id: userId, role} = req.user;
-
-    try {
-        const booking = await bookingModel.handleGetBookingById(id);
-        if (!booking) {
-            return res.status(404).json({ message: "Booking tidak ditemukan"});
-        }
-        
-        if (role === 3 && booking.user_id !== userId){
-            return res.status(403).json({ message: "Akses ditolak" });
-        }
-
-        res.status(200).json({ message: "Booking berhasil ditampilkan", data: booking });
+        const bookings = await bookingModel.getAllBooking();
+        res.status(200).json({ message: "Booking berhasil ditampilkan", data: bookings });
     } catch (error) {
         res.status(500).json({ message: "Booking gagal ditampilkan", error: error.message });
     }
 };
 
-export const handleUpdateBookingStatus = async (req, res) => {
+const handleGetBookingById = async (req, res) => {
+    const { id } = req.params;
+    const { id: userId, role } = req.user;
+
+    try {
+        const booking = await bookingModel.getBookingById(id);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking tidak ditemukan" });
+        }
+
+        if (role === 3 && booking.user_id !== userId) {
+            return res.status(403).json({ message: "Akses ditolak" });
+        }
+
+        res.status(200).json({ message: "Booking berdasarkan id berhasil ditampilkan", data: booking });
+    } catch (error) {
+        res.status(500).json({ message: "Booking gagal ditampilkan", error: error.message });
+    }
+};
+
+const handleUpdateBookingStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
     const validStatuses = ["pending", "accepted", "rejected", "cancelled"];
@@ -53,7 +53,7 @@ export const handleUpdateBookingStatus = async (req, res) => {
     try {
         const booking = await bookingModel.handleGetBookingById(id);
         if (!booking) {
-            return res.status(404).json ({ message: "Booking tidak ditemukan" });
+            return res.status(404).json({ message: "Booking tidak ditemukan" });
         }
 
         if (req.user.role === 2 && booking.id_pakar !== req.user.id) {
@@ -61,13 +61,13 @@ export const handleUpdateBookingStatus = async (req, res) => {
         }
 
         const updated = await bookingModel.handleUpdateBookingStatus(id, status);
-        res.status(500).json({ message : "Status booking berhasil diupdate", data: updated });
+        res.status(200).json({ message: "Status booking berhasil diupdate", data: updated });
     } catch (error) {
         res.status(500).json({ message: "Status booking gagal diupdate", error: error.message });
     }
 };
 
-export const handleDeleteBooking = async (req, res) => {
+const handleDeleteBooking = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -82,3 +82,11 @@ export const handleDeleteBooking = async (req, res) => {
         res.status(500).json({ message: "Gagal menghapus booking", error: error.message });
     }
 };
+
+export {
+    handleCreateBooking,
+    handleGetAllBookings,
+    handleGetBookingById,
+    handleUpdateBookingStatus,
+    handleDeleteBooking,
+}

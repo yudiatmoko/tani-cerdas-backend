@@ -1,15 +1,16 @@
 import { query } from "../database/db.js";
 
 const bookingModel = {
+
     addBooking: async (user_id, pakar_id, date, time) => {
-        const sql = `INSERT INTO booking (user_id, pakar_id, date, time, status) VALUES(?, ?, ?, ?, ?,)`;
+        const sql = `INSERT INTO booking (user_id, pakar_id, date, time, status) VALUES(?, ?, ?, ?, ?)`;
         const params = [user_id, pakar_id, date, time, 'pending'];
         try {
             const result = await query(sql, params);
-            return { id: result.insertID, status: 'pending'};
-        } catch (error) {
+            console.log("Result of INSERT query:", result); // Tambahkan log untuk debugging
+          } catch (error) {
             throw new Error("Tambah booking error: " + error.message);
-        }
+          }
     },
 
     getAllBooking: async() => {
@@ -31,7 +32,7 @@ const bookingModel = {
         }
     },
 
-    getBookingById: async () => {
+    getBookingById: async (id) => {
         try {
             const sql = `
             SELECT b.id, b.user_id, b.pakar_id, b.date, b.time, b.status,
@@ -42,9 +43,9 @@ const bookingModel = {
             JOIN user u2 ON b.pakar_id = u2.id
             WHERE u1.roles = 3
               AND u2.roles = 2
-            WHERE b.id_booking = ?
+              AND b.id_booking = ?
             `;
-            const rows = await query(sql, [id_booking]);
+            const rows = await query(sql, [id]);
             if (rows.length === 0){
                 throw new Error("Booking tidak ditemukan")
             }

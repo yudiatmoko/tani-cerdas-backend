@@ -5,8 +5,8 @@ import {
     handleGetBookingById,
     handleUpdateBookingStatus,
     handleDeleteBooking,
-} from "../controllers/bookingController";
-import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware";
+} from "../controllers/bookingController.js";
+import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
