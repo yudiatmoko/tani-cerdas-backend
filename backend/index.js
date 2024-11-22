@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.use("/api/v1",router);
 
-app.listen(port, async () => {
+app.listen(port, async () => { 
   await testConnection();
   console.log(`Running at ${port}`);
 });
