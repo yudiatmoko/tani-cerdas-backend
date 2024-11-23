@@ -14,40 +14,49 @@ const bookingModel = {
 
     getAllBooking: async() => {
         try {
-            const sql = `
-            SELECT b.id, b.user_id, b.pakar_id, b.date, b.time, b.status,
-                   u1.name AS user_name,
-                   u2.name AS pakar_name
-            FROM booking b
-            JOIN user u1 ON b.user_id = u1.id
-            JOIN user u2 ON b.pakar_id = u2.id
-            WHERE u1.roles = 3
-              AND u2.roles = 2
-            `;
-            const rows = await query(sql);
-            return rows;
+            const sql = await query( `
+            SELECT 
+                b.id, 
+                u1.name AS user_name, 
+                u2.name AS pakar_name, 
+                b.date, 
+                b.time, 
+                b.status
+            FROM 
+                booking b
+            LEFT JOIN user u1 ON b.user_id = u1.id
+            LEFT JOIN user u2 ON b.pakar_id = u2.id`
+            );
+            
+            return sql;
         } catch (error) {
             throw new Error("fetching booking error: " + error.message);
         }
     },
 
-    getBookingById: async () => {
+    getBookingById: async (id) => {
         try {
-            const sql = `
-            SELECT b.id, b.user_id, b.pakar_id, b.date, b.time, b.status,
-                    u1.name AS user_name,
-                    u2.name AS pakar_name
-            FROM booking b
-            JOIN user u1 ON b.user_id = u1.id
-            JOIN user u2 ON b.pakar_id = u2.id
-            WHERE u1.roles = 3
-              AND u2.roles = 2
-            WHERE b.id_booking = ?
+            const sql =`
+            SELECT 
+                b.id, 
+                u1.name AS user_name, 
+                u2.name AS pakar_name, 
+                b.date, 
+                b.time, 
+                b.status
+            FROM 
+                booking b
+            LEFT JOIN user u1 ON b.user_id = u1.id
+            LEFT JOIN user u2 ON b.pakar_id = u2.id
+            WHERE b.id = ?
             `;
-            const rows = await query(sql, [id_booking]);
+            const rows = await query(sql, [id]);
+
             if (rows.length === 0){
                 throw new Error("Booking tidak ditemukan")
             }
+
+            return rows[0];
         } catch (error) {
             throw new Error ("Error menampilkann booking dengan ID: " + error.message);
         }

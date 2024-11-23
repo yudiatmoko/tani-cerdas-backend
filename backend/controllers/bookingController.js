@@ -1,3 +1,5 @@
+import { query } from "../database/db.js";
+import { validationResult } from "express-validator";
 import bookingModel from "../models/bookingModel.js";
 
 const handleCreateBooking = async (req, res) => {
@@ -51,7 +53,7 @@ const handleUpdateBookingStatus = async (req, res) => {
     }
 
     try {
-        const booking = await bookingModel.handleGetBookingById(id);
+        const booking = await bookingModel.getBookingById(id);
         if (!booking) {
             return res.status(404).json({ message: "Booking tidak ditemukan" });
         }
@@ -60,7 +62,7 @@ const handleUpdateBookingStatus = async (req, res) => {
             return res.status(403).json({ message: "Akses ditolak" });
         }
 
-        const updated = await bookingModel.handleUpdateBookingStatus(id, status);
+        const updated = await bookingModel.updateBookingStatus(id, status);
         res.status(200).json({ message: "Status booking berhasil diupdate", data: updated });
     } catch (error) {
         res.status(500).json({ message: "Status booking gagal diupdate", error: error.message });
@@ -71,12 +73,12 @@ const handleDeleteBooking = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const booking = await bookingModel.handleGetBookingById(id);
+        const booking = await bookingModel.getBookingById(id);
         if (!booking) {
             return res.status(404).json({ message: "Booking tidak ditemukan" });
         }
 
-        await bookingModel.handleDeleteBooking(id);
+        await bookingModel.deleteBooking(id);
         res.status(200).json({ message: "Berhasil menghapus booking" });
     } catch (error) {
         res.status(500).json({ message: "Gagal menghapus booking", error: error.message });

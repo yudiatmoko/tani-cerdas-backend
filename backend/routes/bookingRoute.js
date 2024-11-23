@@ -11,9 +11,9 @@ import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware
 const router = express.Router();
 
 router.post("/", authenticateToken, handleCreateBooking);
-router.get("/", authenticateToken, authorizeRoles("admin","pakar"), handleGetAllBookings);
+router.get("/", authenticateToken, authorizeRoles(1,2), handleGetAllBookings);
 router.get("/:id", authenticateToken, handleGetBookingById);
-router.put("/:id/status", authenticateToken, authorizeRoles("pakar"), handleUpdateBookingStatus);
-router.delete("/:id", authenticateToken, authorizeRoles("admin"), handleDeleteBooking);
+router.put("/:id/status", authenticateToken, authorizeRoles(2,1), handleUpdateBookingStatus);
+router.delete("/:id", authenticateToken, authorizeRoles(1), handleDeleteBooking);
 
 export default router;
