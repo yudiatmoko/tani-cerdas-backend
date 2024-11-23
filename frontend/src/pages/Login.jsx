@@ -1,29 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppLogo from "/logo-wtext.svg";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../services/authApi";
+import Spinner from "../components/Spinner";
+import Alert from "../components/Alert";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setLoading(true);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    }
+  }, [navigate]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
   const handleLogin = async (e) => {
-    // e.preventDefault();
-    // try {
-    //     const response = await axios.post('http://localhost:3000/auth/login', { username, password });
-    //     localStorage.setItem('token', response.data.token);
-    //   } catch (error) {
-    //     alert('Login failed: ' + error.response.data.message);
-    //   }
-    navigate("/dashboard");
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await login({
+        email: username,
+        password,
+      });
+      setSuccess(response.message);
+      localStorage.setItem("token", response.token);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errors[0]?.msg || "Login failed";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,6 +67,9 @@ const Login = () => {
               <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Login
               </h1>
+              <Alert message={error} type="error" />
+              <Alert message={success} type="success" />
+              {loading && <Alert message="Loading..." type="loading" />}
               <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                 <div>
                   <label
@@ -56,7 +85,7 @@ const Login = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="nama@example.com"
                     onChange={(e) => setUsername(e.target.value)}
-                    // required
+                    required
                   />
                 </div>
                 <div>
@@ -74,7 +103,7 @@ const Login = () => {
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       onChange={(e) => setPassword(e.target.value)}
-                      // required
+                      required
                     />
                     <button
                       type="button"
@@ -91,9 +120,12 @@ const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full text-white bg-primary-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className={`w-full flex justify-center items-center mt-4 p-2 rounded-full text-white ${
+                    loading ? "bg-gray-400" : "bg-primary-500"
+                  }`}
+                  disabled={loading}
                 >
-                  Masuk
+                  {loading ? <Spinner /> : "Login"}
                 </button>
               </form>
             </div>

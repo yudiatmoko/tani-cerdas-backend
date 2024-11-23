@@ -11,6 +11,7 @@ import {
   authenticateToken,
   authorizeRoles,
 } from "../middlewares/authMiddleware.js";
+import uploadMiddleware from "../middlewares/uploadFilesMiddleware.js";
 
 const router = express.Router();
 
@@ -19,11 +20,11 @@ router.post(
   "/",
   authenticateToken,
   authorizeRoles(1, 2),
+  uploadMiddleware,
   [
     body("title").notEmpty().withMessage("Title is required"),
     body("description").notEmpty().withMessage("Description is required"),
     body("video_url").notEmpty().withMessage("Video URL is required"),
-    body("image_url").notEmpty().withMessage("Image URL is required"),
     body("duration")
       .isInt({ min: 1 })
       .withMessage("Duration must be a positive integer"),
@@ -36,11 +37,11 @@ router.put(
   "/(:id)",
   authenticateToken,
   authorizeRoles(1, 2),
+  uploadMiddleware,
   [
     body("title").notEmpty().withMessage("Title is required"),
     body("description").notEmpty().withMessage("Description is required"),
     body("video_url").notEmpty().withMessage("Video URL is required"),
-    body("image_url").notEmpty().withMessage("Image URL is required"),
     body("duration")
       .isInt({ min: 1 })
       .withMessage("Duration must be a positive integer"),

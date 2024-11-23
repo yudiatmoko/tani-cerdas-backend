@@ -15,6 +15,10 @@ import Module from "./pages/Module.jsx";
 import AddModule from "./pages/AddModule.jsx";
 import ModuleDetail from "./pages/ModuleDetail.jsx";
 import UpdateModule from "./pages/UpdateModule.jsx";
+import Course from "./pages/Course.jsx";
+import AddCourse from "./pages/AddCourse.jsx";
+import UpdateCourse from "./pages/UpdateCourse.jsx";
+import AddCourseModules from "./pages/AddCourseModules.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +30,10 @@ const router = createBrowserRouter(
         <Route path="modules/add" element={<AddModule />} />
         <Route path="modules/:id" element={<UpdateModule />} />
         <Route path="modules/detail/:id" element={<ModuleDetail />} />
+        <Route path="courses" element={<Course />} />
+        <Route path="courses/add" element={<AddCourse />} />
+        <Route path="courses/:id" element={<UpdateCourse />} />
+        <Route path="course-modules/:id" element={<AddCourseModules />} />
       </Route>
     </Route>
   )

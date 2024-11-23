@@ -9,12 +9,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use("/api/v1",router);
+app.use(express.static("public"));
+app.use(cors());
+app.use("/api/v1", router);
 
 app.listen(port, async () => {
   await testConnection();
