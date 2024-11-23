@@ -66,9 +66,15 @@ const handleRegister = async (req, res) => {
     }
 
     await createUser(name, email, password, role_id);
-    res
-      .status(201)
-      .json({ status: true, message: "User registered successfully" });
+    const token = signToken({ name: name, email: email, role: role_id });
+    res.status(201).json({
+      status: true,
+      message: "User  registered successfully",
+      token: token,
+      user: {
+        ...req.body,
+      },
+    });
   } catch (error) {
     console.error("Register error:", error);
     res.status(500).json({ status: false, message: "Internal server error" });
