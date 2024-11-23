@@ -134,9 +134,7 @@ const handleUpdateCourseModulesById = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const courseModulesExists = await CourseModuleModel.getCourseModuleById(
-      id
-    );
+    const courseModulesExists = await CourseModuleModel.getCourseModuleById(id);
     if (courseModulesExists.length === 0) {
       return res.status(404).json({ message: "Course Modules not found" });
     }
@@ -184,6 +182,15 @@ const handleDeleteCourseModule = async (req, res) => {
   const id = req.params.id;
 
   try {
+    const courseModule = await CourseModuleModel.getCourseModuleById(id);
+    if (courseModule.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: "Course module not found",
+      });
+    }
+
+    const course_id = courseModule[0].course_id;
     const result = await CourseModuleModel.deleteCourseModuleById(id);
 
     if (result.affectedRows === 0) {
@@ -192,6 +199,8 @@ const handleDeleteCourseModule = async (req, res) => {
         message: "Course module not found",
       });
     }
+
+    await CourseModuleModel.updateCourseModuleCount(course_id);
 
     return res.status(200).json({
       status: true,

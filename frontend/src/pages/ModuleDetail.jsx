@@ -20,7 +20,7 @@ const ModuleDetail = () => {
           console.log(data);
           setModuleData(data);
         } catch (err) {
-          setError("Error fetching module details.");
+          setError(err.response?.data?.errors[0].msg);
         } finally {
           setLoading(false);
         }

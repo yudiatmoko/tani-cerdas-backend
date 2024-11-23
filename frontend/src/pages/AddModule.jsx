@@ -5,6 +5,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
   <div className="space-y-2">
@@ -13,6 +14,7 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
         Nama Submodul
       </label>
       <input
+        placeholder="Ketikkan judul submodul..."
         type="text"
         name="title"
         value={submodule.title}
@@ -22,10 +24,9 @@ const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
       />
     </div>
     <div>
-      <label className="block text-base font-normal text-black">
-        Isi Submodul
-      </label>
+      <label className="block text-base font-normal text-black">Isi</label>
       <textarea
+        placeholder="Ketikkan isi..."
         name="content"
         value={submodule.content}
         onChange={(e) => onChange(index, e)}
@@ -98,7 +99,7 @@ const AddModule = () => {
         navigate("/modules");
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong ");
+      setError(err.response?.data?.errors[0].msg);
     } finally {
       setLoading(false);
     }
@@ -123,6 +124,7 @@ const AddModule = () => {
             Nama Modul
           </label>
           <input
+            placeholder="Ketikkan judul modul..."
             type="text"
             name="title"
             id="title"
@@ -155,12 +157,12 @@ const AddModule = () => {
         </button>
         <button
           type="submit"
-          className={`w-full mt-4 p-2 rounded-full text-white ${
+          className={`w-full flex justify-center items-center mt-4 p-2 rounded-full text-white ${
             loading ? "bg-gray-400" : "bg-primary-500"
           }`}
           disabled={loading}
         >
-          {loading ? "Menyimpan..." : "Simpan"}
+          {loading ? <Spinner /> : "Simpan"}
         </button>
       </form>
     </>

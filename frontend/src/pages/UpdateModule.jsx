@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchModuleById, updateModule } from "../../services/moduleApi";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 const SubmoduleForm = ({ submodule, index, onChange, onRemove }) => (
   <div className="space-y-2">
@@ -54,7 +55,7 @@ const UpdateModule = () => {
         const response = await fetchModuleById(id, token);
         setModuleData(response);
       } catch (err) {
-        setError(err.response?.message || "Failed to fetch module data");
+        setError(err.response?.data?.errors[0].msg);
       } finally {
         setLoading(false);
       }
@@ -146,12 +147,12 @@ const UpdateModule = () => {
         ))}
         <button
           type="submit"
-          className={`w-full mt-4 p-2 rounded-full text-white ${
+          className={`w-full flex justify-center items-center mt-4 p-2 rounded-full text-white ${
             loading ? "bg-gray-400" : "bg-primary-500"
           }`}
           disabled={loading}
         >
-          {loading ? "Menyimpan..." : "Simpan Perubahan"}
+          {loading ? <Spinner /> : "Simpan perubahan"}
         </button>
       </form>
     </>

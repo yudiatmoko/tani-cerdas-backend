@@ -7,13 +7,22 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SchoolIcon from "@mui/icons-material/School";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
-
 import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isEducationSubmenuOpen, setIsEducationSubmenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Apakah Anda yakin ingin keluar?");
+    if (confirmLogout) {
+      localStorage.removeItem("token");
+      navigate("/");
+    }
+  };
 
   return (
     <div
@@ -104,15 +113,6 @@ const Sidebar = () => {
                       <span>Modul</span>
                     </Link>
                   </li>
-                  <li className="mb-2">
-                    <Link
-                      to="/education/students"
-                      className="flex items-center p-2 hover:bg-gray-700 rounded"
-                    >
-                      <i className="fas fa-user-graduate me-2"></i>
-                      <span>Peserta</span>
-                    </Link>
-                  </li>
                 </ul>
               )}
             </div>
@@ -138,6 +138,17 @@ const Sidebar = () => {
                 Manajemen Komunitas
               </span>
             </Link>
+          </li>
+          <li className="mb-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center p-2 hover:bg-gray-700 rounded w-full text-left"
+            >
+              <LogoutIcon fontSize="small" className="me-2" />
+              <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
+                Logout
+              </span>
+            </button>
           </li>
         </ul>
       </nav>
