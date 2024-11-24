@@ -37,7 +37,9 @@ const router = createBrowserRouter(
         <Route path="courses/add" element={<AddCourse />} />
         <Route path="courses/:id" element={<UpdateCourse />} />
         <Route path="course-modules/:id" element={<AddCourseModules />} />
-        
+        <Route path="booking" element={<Booking/>}/>
+        <Route path="booking/add" element={<AddBooking/>}/>
+        <Route path="booking/:id" element={<UpdateBooking/>}/>
       </Route>
     </Route>
   )
