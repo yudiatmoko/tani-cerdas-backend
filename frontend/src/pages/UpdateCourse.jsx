@@ -37,7 +37,7 @@ const UpdateCourse = () => {
           setPreviousImage(response.image_url);
         }
       } catch (err) {
-        setError(err.response?.data?.errors[0].msg);
+        setError(err.response?.data?.message || "Error updating course");
       } finally {
         setLoading(false);
       }

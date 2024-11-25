@@ -99,7 +99,7 @@ const AddModule = () => {
         navigate("/modules");
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.errors[0].msg);
+      setError(err.response?.data?.errors[0].msg || "Error adding module");
     } finally {
       setLoading(false);
     }

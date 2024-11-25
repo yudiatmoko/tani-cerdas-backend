@@ -20,7 +20,6 @@ const getAllCourses = async () => {
 
     const formattedCourses = [];
     for (const course of coursesData) {
-      // Buat objek contributor
       const contributor = {
         id: course.contributor_id,
         name: course.contributor_name,
@@ -31,7 +30,6 @@ const getAllCourses = async () => {
         imageUrl: course.contributor_image,
       };
 
-      // Ambil data module
       const moduleData = await query(
         `SELECT m.id AS moduleId, m.title AS moduleTitle, m.submodules_num
            FROM course_modules cm
@@ -40,7 +38,6 @@ const getAllCourses = async () => {
         [course.id]
       );
 
-      // Tambahkan submodules ke setiap module
       for (const module of moduleData) {
         const submoduleData = await query(
           `SELECT id AS submoduleId, title, content
@@ -51,7 +48,6 @@ const getAllCourses = async () => {
         module.submodules = submoduleData;
       }
 
-      // Format course
       formattedCourses.push({
         id: course.id,
         image: course.image_url,
@@ -60,8 +56,9 @@ const getAllCourses = async () => {
         level: course.level,
         desc: course.description,
         videoUrl: course.video_url,
-        contributor, // Tambahkan contributor sebagai objek
-        courseModules: moduleData, // Tambahkan module dengan submodules
+        contributor,
+        modulesNum: moduleData.length,
+        courseModules: moduleData,
       });
     }
 

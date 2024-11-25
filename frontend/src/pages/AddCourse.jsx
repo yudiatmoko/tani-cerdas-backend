@@ -61,7 +61,7 @@ const AddCourse = () => {
         navigate("/courses");
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.errors[0].msg);
+      setError(err.response?.data?.message);
     } finally {
       setLoading(false);
     }

@@ -82,7 +82,7 @@ const CourseModulesPage = () => {
       setSuccess(response.message);
     } catch (error) {
       console.error(error.msg);
-      setError(error.response?.data?.errors[0].msg);
+      setError(error.response?.data?.errors[0].msg || "Error adding module");
     } finally {
       setLoading(false);
       setTimeout(() => {
