@@ -119,12 +119,12 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link
-              to={"/consultation"}
+              to={"/booking"}
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <QuestionAnswerIcon fontSize="small" className="me-2" />
               <span className={`${isExpanded ? "block" : "hidden"} me-2`}>
-                Manajemen Konsultasi
+                Manajemen Booking
               </span>
             </Link>
           </li>
