@@ -19,6 +19,9 @@ import Course from "./pages/Course.jsx";
 import AddCourse from "./pages/AddCourse.jsx";
 import UpdateCourse from "./pages/UpdateCourse.jsx";
 import AddCourseModules from "./pages/AddCourseModules.jsx";
+import Booking from "./pages/Booking.jsx";
+import AddBooking from "./pages/AddBooking.jsx";
+import UpdateBooking from "./pages/UpdateBooking.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +37,9 @@ const router = createBrowserRouter(
         <Route path="courses/add" element={<AddCourse />} />
         <Route path="courses/:id" element={<UpdateCourse />} />
         <Route path="course-modules/:id" element={<AddCourseModules />} />
+        <Route path="booking" element={<Booking/>}/>
+        <Route path="booking/add" element={<AddBooking/>}/>
+        <Route path="booking/:id" element={<UpdateBooking/>}/>
       </Route>
     </Route>
   )
