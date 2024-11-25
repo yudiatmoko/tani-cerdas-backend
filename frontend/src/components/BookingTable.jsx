@@ -17,7 +17,7 @@ const BookingTable = () => {
         const getData = async () => {
             setLoading(true);
             try {
-                const fetchedData = await fetchData();
+                const fetchedData = await fetchData(token);
                 setData(fetchedData);
             } catch (error) {
                 setError("Error fetching data booking");

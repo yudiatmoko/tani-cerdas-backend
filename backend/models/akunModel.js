@@ -2,22 +2,7 @@ import { query } from "../database/db.js";
 
 const akunModel ={
     getAllAkun: async() => {
-        try {
-            const sql = await query(`
-            SELECT
-                u.id,
-                u.name,
-                u.email,
-                r.title
-            FROM
-                user u
-            LEFT JOIN roles r ON u.id = r.id
-            `)
-
-            return sql;
-        } catch (error) {
-            throw new Error("Fetching booking error: " + error.message);
-        } 
+        return query("SELECT * FROM user")
     },
 
     getAkunById: async (id) => {

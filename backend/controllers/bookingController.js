@@ -22,8 +22,8 @@ const handleCreateBooking = async (req, res) => {
 
 const handleGetAllBookings = async (req, res) => {
     try {
-        const bookings = await getAllBooking();
-        res.status(200).json({ message: "Booking berhasil ditampilkan", data: bookings });
+        const booking = await getAllBooking();
+        res.status(200).json({ message: "Booking berhasil ditampilkan", data: booking });
     } catch (error) {
         res.status(500).json({ message: "Booking gagal ditampilkan", error: error.message });
     }

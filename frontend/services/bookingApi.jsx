@@ -1,6 +1,6 @@
 import axiosInstance from "./api";
 
-export const fetchData = async () => {
+export const fetchData = async (token) => {
     try {
         const response = await axiosInstance.get("/booking", {
             headers: {

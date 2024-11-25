@@ -1,7 +1,7 @@
 import akunModel from "../models/akunModel.js";
 
 const akunController = {
-    getAllAkun: async (req, res) => {
+    handleGetAllAkun: async (req, res) => {
         try {
             const result = await akunModel.getAllAkun();
             res.status(200).json({
