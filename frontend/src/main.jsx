@@ -23,6 +23,10 @@ import Events from "./pages/Events.jsx"; // Tambahkan import untuk Events
 import AddEvent from "./pages/AddEvent.jsx"; // Tambahkan import untuk AddEvent
 import UpdateEvent from "./pages/UpdateEvent.jsx"; // Tambahkan import untuk UpdateEvent
 import EventDetail from "./pages/EventDetail.jsx"; // Tambahkan import untuk EventDetail
+import Booking from "./pages/Booking.jsx";
+import AddBooking from "./pages/AddBooking.jsx";
+import UpdateBooking from "./pages/UpdateBooking.jsx";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +47,9 @@ const router = createBrowserRouter(
         <Route path="events/add" element={<AddEvent />} />
         <Route path="events/:id" element={<UpdateEvent />} />
         <Route path="events/detail/:id" element={<EventDetail />} />
+        <Route path="booking" element={<Booking/>}/>
+        <Route path="booking/add" element={<AddBooking/>}/>
+        <Route path="booking/:id" element={<UpdateBooking/>}/>
       </Route>
     </Route>
   )

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchBookingById, updateBooking } from "../../services/bookingApi"; // Pastikan API sudah tersedia
+import { fetchBookingById, updateBookingStatus } from "../../services/bookingApi"; // Pastikan API sudah tersedia
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Alert from "../components/Alert";
 import Spinner from "../components/Spinner";
@@ -52,7 +52,7 @@ const UpdateBooking = () => {
     try {
       const token = localStorage.getItem("token");
       const updatedData = { ...bookingData };
-      const response = await updateBooking(id, updatedData, token); // Update booking API
+      const response = await updateBookingStatus(id, updatedData, token); // Update booking API
       setSuccess(response.message);
       setTimeout(() => {
         navigate("/bookings"); // Redirect ke halaman booking list

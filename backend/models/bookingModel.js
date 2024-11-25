@@ -1,18 +1,16 @@
 import { query } from "../database/db.js";
 
-const bookingModel = {
-    addBooking: async (user_id, pakar_id, date, time) => {
-        const sql = `INSERT INTO booking (user_id, pakar_id, date, time, status) VALUES(?, ?, ?, ?, ?,)`;
-        const params = [user_id, pakar_id, date, time, 'pending'];
-        try {
-            const result = await query(sql, params);
-            return { id: result.insertID, status: 'pending'};
-        } catch (error) {
-            throw new Error("Tambah booking error: " + error.message);
-        }
-    },
 
-    getAllBooking: async() => {
+    const addBooking = async (params) => {
+        
+            const sql = 
+                `INSERT INTO booking (user_id, pakar_id, date, time, status)
+                VALUES (?, ?, ?, ?, 'pending')`;
+
+            return query(sql, params);
+    };
+
+    const getAllBooking = async() => {
         try {
             const sql = await query( `
             SELECT 
@@ -32,9 +30,9 @@ const bookingModel = {
         } catch (error) {
             throw new Error("fetching booking error: " + error.message);
         }
-    },
+    };
 
-    getBookingById: async (id) => {
+    const getBookingById = async (id) => {
         try {
             const sql =`
             SELECT 
@@ -60,9 +58,9 @@ const bookingModel = {
         } catch (error) {
             throw new Error ("Error menampilkann booking dengan ID: " + error.message);
         }
-    },
+    };
 
-    updateBookingStatus: async (id, status) => {
+    const updateBookingStatus = async (id, status) => {
         try {
             const sql = "UPDATE booking SET status = ? WHERE id = ?";
             const result = await query(sql, [status, id]);
@@ -73,9 +71,9 @@ const bookingModel = {
         } catch (error) {
             throw new Error("Error saat update status booking: " + error.message);
         }
-    },
+    };
 
-    cancelBooking: async (id) => {
+    const cancelBooking = async (id) => {
         try {
             const sql = "UPDATE booking SET status = 'cancelled' WHERE id = ?";
             const result = await query(sql, [id]);
@@ -86,9 +84,9 @@ const bookingModel = {
         } catch (error) {
             throw new Error("Error memnbatalkan booking: " + error.message);            
         }
-    },
+    };
 
-    deleteBooking: async (id) => {
+    const deleteBooking = async (id) => {
         try {
             const sql = "DELETE FROM booking WHERE id = ?";
             const result = await query(sql, [id]);
@@ -99,9 +97,9 @@ const bookingModel = {
         } catch (error) {
             throw new Error("Error menghapus booking: " + error.message);
         }
-    },
+    };
 
-    checkExistingBooking: async (user_id, pakar_id, date, time) => {
+    const checkExistingBooking = async (user_id, pakar_id, date, time) => {
         try {
             const sql = "SELECT id FROM booking WHERE user_id = ? AND pakar_id = ? AND date = ? AND time = ?";
             const result = await query(sql, [user_id, pakar_id, date, time]);
@@ -109,7 +107,7 @@ const bookingModel = {
         } catch (error) {
             throw new Error("Error mengecek keberadaan booking: " + error.message);
         }
-    },
-}
+    };
 
-export default bookingModel;
+
+export {addBooking, getAllBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking, cancelBooking};
