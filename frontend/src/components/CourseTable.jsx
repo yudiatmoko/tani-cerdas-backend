@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteCourse, fetchData } from "../../services/courseApi";
 import Alert from "./Alert";
@@ -28,7 +27,15 @@ const CourseTable = () => {
     getData();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, modules_num) => {
+    if (modules_num > 0) {
+      setError("Course cannot be deleted because it has modules.");
+      setTimeout(() => {
+        setError("");
+      }, 2500);
+      return;
+    }
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this course?"
     );
@@ -99,7 +106,9 @@ const CourseTable = () => {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(course.id)}
+                      onClick={() =>
+                        handleDelete(course.id, course.modules_num)
+                      }
                       className="bg-red-500 p-2 rounded-md text-white"
                     >
                       <DeleteIcon fontSize="small" />

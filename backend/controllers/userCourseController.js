@@ -1,4 +1,3 @@
-import { query } from "../database/db.js";
 import { validationResult } from "express-validator";
 import { getCourseById } from "../models/courseModel.js";
 import { getUserById } from "../models/authModel.js";
@@ -123,7 +122,10 @@ const handleUpdateUserCourseByUserAndCourse = async (req, res) => {
   const user_id = decoded.id;
 
   try {
-    const userCourse = await UserCourseModel.checkExistEnrollment(user_id, course_id);
+    const userCourse = await UserCourseModel.checkExistEnrollment(
+      user_id,
+      course_id
+    );
 
     if (!userCourse) {
       return res.status(404).json({ message: "Data not found" });
@@ -140,7 +142,7 @@ const handleUpdateUserCourseByUserAndCourse = async (req, res) => {
       is_complete,
       testimonials,
       completedAt
-    )
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Data not found" });
     }
@@ -170,8 +172,8 @@ const handleDeleteUserCourseByUserAndCourse = async (req, res) => {
     const user_id = decoded.id;
 
     const [userCourse] = await UserCourseModel.checkExistEnrollment(
-      user_id,
-      course_id
+      course_id,
+      user_id
     );
 
     if (!userCourse) {

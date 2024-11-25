@@ -98,7 +98,7 @@ const UpdateModule = () => {
         navigate("/modules");
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong");
+      setError(err.response?.data?.message || "Error updating module");
     } finally {
       setLoading(false);
     }

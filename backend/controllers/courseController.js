@@ -124,10 +124,9 @@ const handleUpdateCourseById = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    const duplicateTitle = await query(
-      "SELECT * FROM course WHERE title = ? AND id != ?",
-      [title, id]
-    );
+    const duplicateTitle = await query("SELECT * FROM course WHERE title = ?", [
+      title,
+    ]);
     if (duplicateTitle.length > 0) {
       if (image_url) deleteFile(image_url.path);
       return res

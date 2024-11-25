@@ -61,7 +61,7 @@ const UserCourseModel = {
     return await query(sql, params);
   },
 
-  checkExistEnrollment: async (user_id, course_id) => {
+  checkExistEnrollment: async (course_id, user_id) => {
     return await query(
       "SELECT id FROM user_courses WHERE course_id = ? AND user_id = ?",
       [course_id, user_id]
