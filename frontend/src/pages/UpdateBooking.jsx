@@ -19,6 +19,7 @@ const UpdateBooking = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const [preview, setPreview] = useState(null);
 
   // Fetch booking data by ID
   useEffect(() => {
@@ -77,13 +78,13 @@ const UpdateBooking = () => {
       <form onSubmit={submitHandler} className="space-y-4">
         <div>
           <label htmlFor="user_id" className="block text-base font-normal text-black">
-            User ID
+            Nama User
           </label>
           <input
             type="text"
             name="user_id"
             id="user_id"
-            value={bookingData.user_id}
+            value={bookingData.user_name}
             onChange={handleInputChange}
             className="w-full mt-1 p-2 border rounded-md border-primary-300"
             required
@@ -92,13 +93,13 @@ const UpdateBooking = () => {
 
         <div>
           <label htmlFor="pakar_id" className="block text-base font-normal text-black">
-            Pakar ID
+            Nama Pakar
           </label>
           <input
             type="text"
             name="pakar_id"
             id="pakar_id"
-            value={bookingData.pakar_id}
+            value={bookingData.pakar_name}
             onChange={handleInputChange}
             className="w-full mt-1 p-2 border rounded-md border-primary-300"
             required

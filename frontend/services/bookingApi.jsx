@@ -4,7 +4,7 @@ export const fetchData = async (token) => {
     try {
         const response = await axiosInstance.get("/booking", {
             headers: {
-                Authorization : `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         });
         return response.data.data;

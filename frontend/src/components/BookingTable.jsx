@@ -12,6 +12,7 @@ const BookingTable = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
+    const token = localStorage.getItem("token")
 
     useEffect(() => {
         const getData = async () => {
@@ -82,10 +83,10 @@ const BookingTable = () => {
                                     {booking.id}
                                 </td>
                                 <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
-                                    {booking.u1.name}
+                                    {booking.user_name || "N/A"} 
                                 </td>
                                 <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
-                                    {booking.u2.name}
+                                    {booking.pakar_name || "N/A"}
                                 </td>
                                 <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
                                     {booking.date}
