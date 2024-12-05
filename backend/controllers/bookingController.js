@@ -2,22 +2,27 @@ import { query } from "../database/db.js";
 import { validationResult } from "express-validator";
 import {getAllBooking, addBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking} from "../models/bookingModel.js";
 
+// Fungsi untuk membuat booking
 const handleCreateBooking = async (req, res) => {
-    const { pakar_id, date, time } = req.body;
-    const user_id = req.user.id;
+  const { user_id, pakar_id, date, time } = req.body;
 
-    try {
-        const params = [
-            user_id,
-            pakar_id,
-            date,
-            time
-        ];
-        await addBooking(params)
-        res.status(201).json({ message: "Booking berhasil dibuat", data: result });
-    } catch (error) {
-        res.status(500).json({ message: "Booking gagal dibuat", error: error.message });
-    }
+  // Validasi input
+  if (!user_id || !pakar_id || !date || !time) {
+    return res.status(400).json({ message: "Semua field harus diisi." });
+  }
+
+  try {
+    // Menambahkan booking
+    const insertId = await addBooking(user_id, pakar_id, date, time);
+    return res.status(201).json({
+      status: true,
+      message: "Booking created successfully",
+      bookingId: insertId, // Mengembalikan ID booking yang baru
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const handleGetAllBookings = async (req, res) => {

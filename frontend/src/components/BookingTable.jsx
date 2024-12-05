@@ -94,21 +94,25 @@ const BookingTable = () => {
                                 <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
                                     {booking.time}
                                 </td>
-                                    <div className="flex gap-2 justify-center">
-                                        <button
+                                <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
+                                    {booking.status}
+                                </td>
+
+                                <div className="flex gap-2 justify-center">
+                                    <button
                                         onClick={() => navigate(`/booking/${booking.id}`)}
                                         className="bg-green-500 p-2 rounded-md text-white"
-                                        >
-                                            EDIT
-                                        </button>
+                                    >
+                                        EDIT
+                                    </button>
                                         <button
                                         onClick={() => handleDelete(booking.id)}
                                         className="bg-red-500 p-2 rounded-md text-white"
-                                        >
-                                            <DeleteIcon fontSize="small" />
-                                        </button>
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </button>
 
-                                    </div>
+                                </div>
                             </tr>
                         ))}
                     </tbody>

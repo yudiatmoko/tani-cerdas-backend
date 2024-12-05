@@ -10,6 +10,8 @@ const UpdateBooking = () => {
   const [bookingData, setBookingData] = useState({
     user_id: "",
     pakar_id: "",
+    user_name: "", // Tambahkan ini jika diperlukan
+    pakar_name: "",
     date: "",
     time: "",
     status: "",
@@ -28,7 +30,15 @@ const UpdateBooking = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetchBookingById(id, token); // Fetch booking API
-        setBookingData(response);
+        setBookingData({
+          user_id: response.user_id || "",
+          pakar_id: response.pakar_id || "",
+          user_name: response.user_name || "",
+          pakar_name: response.pakar_name || "",
+          date: response.date || "",
+          time: response.time || "",
+          status: response.status || "",
+        });
       } catch (err) {
         setError(err.response?.data?.message || "Gagal mengambil data booking");
       } finally {
@@ -38,6 +48,12 @@ const UpdateBooking = () => {
 
     fetchBooking();
   }, [id]);
+
+  const formatDate = (isoDate) => {
+    if (!isoDate) return ""; // Default value jika kosong
+    const date = new Date(isoDate);
+    return date.toISOString().split("T")[0]; // Format "yyyy-MM-dd"
+  };
 
   const handleInputChange = (e) => {
     setBookingData({ ...bookingData, [e.target.name]: e.target.value });
@@ -56,7 +72,7 @@ const UpdateBooking = () => {
       const response = await updateBookingStatus(id, updatedData, token); // Update booking API
       setSuccess(response.message);
       setTimeout(() => {
-        navigate("/bookings"); // Redirect ke halaman booking list
+        navigate("/booking"); // Redirect ke halaman booking list
       }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || "Gagal memperbarui data booking");
@@ -84,7 +100,7 @@ const UpdateBooking = () => {
             type="text"
             name="user_id"
             id="user_id"
-            value={bookingData.user_name}
+            value={bookingData.user_name ||""}
             onChange={handleInputChange}
             className="w-full mt-1 p-2 border rounded-md border-primary-300"
             required
@@ -99,7 +115,7 @@ const UpdateBooking = () => {
             type="text"
             name="pakar_id"
             id="pakar_id"
-            value={bookingData.pakar_name}
+            value={bookingData.pakar_name || ""}
             onChange={handleInputChange}
             className="w-full mt-1 p-2 border rounded-md border-primary-300"
             required
@@ -114,7 +130,7 @@ const UpdateBooking = () => {
             type="date"
             name="date"
             id="date"
-            value={bookingData.date}
+            value={formatDate(bookingData.date)}
             onChange={handleInputChange}
             className="w-full mt-1 p-2 border rounded-md border-primary-300"
             required
@@ -152,7 +168,8 @@ const UpdateBooking = () => {
               Pilih status...
             </option>
             <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
             <option value="cancelled">Cancelled</option>
           </select>
         </div>

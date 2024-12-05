@@ -30,18 +30,25 @@ export const addBooking = async (bookingData, token) => {
 
 export const updateBookingStatus = async (id, bookingData, token) => {
     if (!token) throw new Error("Token tidak ditemukan. Pastikan Anda telah login.");
+    if (!id) throw new Error("ID booking tidak ditemukan.");
+    if (!bookingData) throw new Error("Data booking tidak valid.");
+  
     try {
-      const response = await axiosInstance.put(`/booking/${id}`, bookingData, {
+      const response = await axiosInstance.put(`/booking/${id}/status`, bookingData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data; // Return response data
     } catch (error) {
+      if (error.response?.status === 401) {
+        throw new Error("Token tidak valid atau telah kedaluwarsa. Silakan login kembali.");
+      }
       console.error("Error updating booking status:", error);
-      throw new Error(error.response?.data?.message || "Gagal memperbarui status booking.");
+      throw new Error(error.response?.data?.message || error.message || "Gagal memperbarui status booking.");
     }
   };
+  
 
 export const fetchBookingById = async (id, token) => {
     try {

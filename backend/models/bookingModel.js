@@ -2,13 +2,13 @@ import { query } from "../database/db.js";
 
 
     const addBooking = async (params) => {
-        
-            const sql = 
-                `INSERT INTO booking (user_id, pakar_id, date, time, status)
-                VALUES (?, ?, ?, ?, 'pending')`;
-
-            return query(sql, params);
+        const sql = `
+            INSERT INTO booking (user_id, pakar_id, date, time)
+            VALUES (?, ?, ?, ?)
+        `;
+        return query(sql, params);
     };
+    
 
     const getAllBooking = async() => {
         try {
