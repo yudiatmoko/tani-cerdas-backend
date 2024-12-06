@@ -65,7 +65,7 @@ const Sidebar = () => {
           </li>
           <li className="mb-4">
             <Link
-              // to={"/user"}
+              to={"/akun"}
               className="flex items-center p-2 hover:bg-gray-700 rounded"
             >
               <BadgeIcon fontSize="small" className="me-2" />

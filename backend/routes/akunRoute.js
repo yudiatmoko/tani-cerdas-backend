@@ -1,17 +1,29 @@
 import express from "express";
-import akunModelController from "../controllers/akunModelController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import {
+    handleGetAkunById,
+    handleGetAkunByName,
+    handleGetAllAkun,
+    handleUpdateAkunFields,
+} from "../controllers/akunController.js";
+import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/akun", akunModelController.getAllAkun);
-router.get("/akun/:id", akunModelController.getAkunById);
-router.get("/akun/by-name", akunModelController.getAkunByName);
+// Route untuk mendapatkan semua akun
+router.get("/", authenticateToken, authorizeRoles(1), handleGetAllAkun);
+
+// Route untuk mendapatkan akun berdasarkan ID
+router.get("/:id", authenticateToken, authorizeRoles(1), handleGetAkunById);
+
+// Route untuk mendapatkan akun berdasarkan nama
+router.get("/akun/by-name", authenticateToken, authorizeRoles(1), handleGetAkunByName);
+
+// Route untuk memperbarui field pada akun
 router.put(
     "/akun/:id",
-    authMiddleware.authenticate, 
-    authMiddleware.authorizeRoles(1, 2),
-    akunModelController.updateAkunFields 
+    authenticateToken,
+    authorizeRoles(2, 3), // Role 2: pakar, Role 3: user
+    handleUpdateAkunFields
 );
 
 export default router;

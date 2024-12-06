@@ -1,11 +1,25 @@
 import { query } from "../database/db.js";
 
-const akunModel ={
-    getAllAkun: async() => {
-        return query("SELECT * FROM user")
-    },
 
-    getAkunById: async (id) => {
+    const getAllAkun = async() => {
+        try {
+            const sql = await query(`
+            SELECT    
+                u.id,
+                u.name,
+                u.email,
+                u.role_id AS role
+            FROM
+                user u    
+            `);
+
+            return sql;
+        } catch (error) {
+            throw new Error("fetching akun error: " + error.message);
+        }
+    };
+
+    const getAkunById = async (id) => {
         try {
             const sql =`
                 SELECT
@@ -28,9 +42,9 @@ const akunModel ={
         } catch (error) {
             throw new Error ("Error menampilkan akun dengan ID: " + error.message);
         }
-    },
+    }
 
-    getAkunByName: async (name) => {
+    const getAkunByName = async (name) => {
         try {
             const sql =`
                 SELECT
@@ -51,11 +65,11 @@ const akunModel ={
 
                 return rows[0];
         } catch (error) {
-            throw new Error ("Error menampilkan akun dengan Nama: " = error.message)
+            throw new Error ("Error menampilkan akun dengan Nama: " + error.message)
         }
-    },
+    };
 
-    updateAkunFields: async (id, fields) => {
+    const updateAkunFields = async (id, fields) => {
         try {
             // Filter fields untuk hanya mengupdate kolom tertentu jika nilainya null
             const validFields = ['city', 'job', 'image_url', 'experience'];
@@ -88,7 +102,7 @@ const akunModel ={
         } catch (error) {
             throw new Error("Error memperbarui data akun: " + error.message);
         }
-    },
-};
+    };
 
-export default akunModel;
+
+export {getAllAkun, getAkunById, getAkunByName, updateAkunFields};

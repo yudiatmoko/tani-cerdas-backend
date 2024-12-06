@@ -6,7 +6,8 @@ import courseModules from "./courseModulesRoute.js";
 import educations from "./educationRoute.js";
 import userCourses from "./userCourseRoute.js";
 import bookings from "./bookingRoute.js";
-import events from "./eventsRoute.js"; // Import route events
+import events from "./eventsRoute.js";
+import akun from "./akunRoute.js"; // Import route events
 
 const app = express();
 
@@ -17,7 +18,8 @@ app.use("/education", educations);
 app.use("/course-modules", courseModules);
 app.use("/user-courses", userCourses);
 app.use("/booking", bookings);
-app.use("/event", events); // Tambahkan route events
+app.use("/event", events);
+app.use("/akun", akun); // Tambahkan route events
 
 app.post('/api/v1/event', (req, res) => {
     // Handle event creation logic here

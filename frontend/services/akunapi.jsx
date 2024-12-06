@@ -1,9 +1,13 @@
 import axiosInstance from "./api";
 
 // Mendapatkan semua data akun
-export const fetchAllAkun = async () => {
+export const fetchAllAkun = async (token) => {
     try {
-        const response = await axiosInstance.get("/akun");
+        const response = await axiosInstance.get("/akun", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
         return response.data.data; // Mengembalikan data akun
     } catch (error) {
         console.error("Error fetching all akun:", error);

@@ -11,7 +11,7 @@ const Course = () => {
           title="Detail Akun"
           onclick={() => navigate("/courses/add")}
         />
-        <CourseTable />
+        <AkunTable />
     </>
   );
 };

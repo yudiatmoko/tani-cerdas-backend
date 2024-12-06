@@ -26,6 +26,7 @@ import EventDetail from "./pages/EventDetail.jsx"; // Tambahkan import untuk Eve
 import Booking from "./pages/Booking.jsx";
 import AddBooking from "./pages/AddBooking.jsx";
 import UpdateBooking from "./pages/UpdateBooking.jsx";
+import Akun from"./pages/Akun.jsx";
 
 
 const router = createBrowserRouter(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
         <Route path="booking" element={<Booking/>}/>
         <Route path="booking/add" element={<AddBooking/>}/>
         <Route path="booking/:id" element={<UpdateBooking/>}/>
+        <Route path="akun" element={<Akun/>}/>
       </Route>
     </Route>
   )

@@ -4,26 +4,40 @@ import {getAllBooking, addBooking, getBookingById, updateBookingStatus, deleteBo
 
 // Fungsi untuk membuat booking
 const handleCreateBooking = async (req, res) => {
-  const { user_id, pakar_id, date, time } = req.body;
-
-  // Validasi input
-  if (!user_id || !pakar_id || !date || !time) {
-    return res.status(400).json({ message: "Semua field harus diisi." });
-  }
-
-  try {
-    // Menambahkan booking
-    const insertId = await addBooking(user_id, pakar_id, date, time);
-    return res.status(201).json({
-      status: true,
-      message: "Booking created successfully",
-      bookingId: insertId, // Mengembalikan ID booking yang baru
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
+    const { user_id, pakar_id, date, time } = req.body;
+  
+    // Validasi input
+    if (!user_id || !pakar_id || !date || !time) {
+      return res.status(400).json({ status: false, message: "Semua field harus diisi." });
+    }
+  
+    try {
+  
+        const formattedDate = new Date(date).toISOString().split('T')[0];
+      // Menambahkan booking
+      const insertId = await addBooking([user_id, pakar_id, formattedDate, time]);
+      return res.status(201).json({
+        status: true,
+        message: "Booking berhasil dibuat.",
+        bookingId: insertId, // Mengembalikan ID booking yang baru
+      });
+    } catch (error) {
+      console.error(error);
+  
+      // Penanganan error
+      if (error.code === "ER_NO_REFERENCED_ROW_2") {
+        return res.status(400).json({
+          status: false,
+          message: "User ID atau Pakar ID tidak ditemukan.",
+        });
+      }
+      return res.status(500).json({
+        status: false,
+        message: "Terjadi kesalahan pada server.",
+        error: error.message,
+      });
+    }
+  };
 
 const handleGetAllBookings = async (req, res) => {
     try {
