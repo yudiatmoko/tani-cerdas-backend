@@ -25,8 +25,7 @@ import { query } from "../database/db.js";
                 SELECT
                     u.id,
                     u.name,
-                    u.email,
-                    r.title
+                    u.email
                 FROM
                     user u
                 LEFT JOIN roles r ON u.id = r.id
@@ -50,8 +49,7 @@ import { query } from "../database/db.js";
                 SELECT
                     u.id,
                     u.name,
-                    u.email,
-                    r.title
+                    u.email
                 FROM
                     user u
                 LEFT JOIN roles r ON u.id = r.id

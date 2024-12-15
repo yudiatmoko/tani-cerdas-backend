@@ -1,6 +1,6 @@
 import { query } from "../database/db.js";
 import { validationResult } from "express-validator";
-import {getAllBooking, addBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking} from "../models/bookingModel.js";
+import {getAllBooking, addBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking, getBookingByUserId} from "../models/bookingModel.js";
 
 // Fungsi untuk membuat booking
 const handleCreateBooking = async (req, res) => {
@@ -68,6 +68,27 @@ const handleGetBookingById = async (req, res) => {
     }
 };
 
+const handleGetBookingByUserId = async (req, res) => {
+    const { id } = req.params;
+    const { id: userId, role } = req.user;
+
+    try {
+        const booking = await getBookingByUserId(id);
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking tidak ditemukan" });
+        }
+        
+        if (role === 3 && booking.user_id !== userId) {
+            return res.status(403).json({ message: "Akses ditolak" });
+        }
+
+        res.status(200).json({ message: "Booking berdasarkan id berhasil ditampilkan", data: booking });
+    } catch (error) {
+        res.status(500).json({ message: "Booking gagal ditampilkan", error: error.message });
+    }
+};
+
 const handleUpdateBookingStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
@@ -116,4 +137,5 @@ export {
     handleGetBookingById,
     handleUpdateBookingStatus,
     handleDeleteBooking,
+    handleGetBookingByUserId
 }
