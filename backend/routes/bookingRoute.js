@@ -5,6 +5,7 @@ import {
     handleGetBookingById,
     handleUpdateBookingStatus,
     handleDeleteBooking,
+    handleGetBookingByUserId
 } from "../controllers/bookingController.js";
 import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware.js";
 
@@ -15,5 +16,5 @@ router.get("/", authenticateToken, authorizeRoles(1,2), handleGetAllBookings);
 router.get("/:id", authenticateToken, handleGetBookingById);
 router.put("/:id/status", authenticateToken, authorizeRoles(2,1), handleUpdateBookingStatus);
 router.delete("/:id", authenticateToken, authorizeRoles(1), handleDeleteBooking);
-
+router.get("/user/:id", authenticateToken, handleGetBookingByUserId);
 export default router;

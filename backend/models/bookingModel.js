@@ -61,6 +61,38 @@ import { query } from "../database/db.js";
         }
     };
 
+    const getBookingByUserId = async (user_id) => {
+        try {
+            console.log("Memulai query untuk user_id:", user_id); // Log awal
+            const sql = `
+                SELECT 
+                    b.id, 
+                    u1.name AS user_name, 
+                    u2.name AS pakar_name, 
+                    b.date, 
+                    b.time, 
+                    b.status
+                FROM 
+                    booking b
+                LEFT JOIN user u1 ON b.user_id = u1.id
+                LEFT JOIN user u2 ON b.pakar_id = u2.id
+                WHERE b.user_id = ?
+            `;
+            const rows = await query(sql, [user_id]);
+            console.log("Query selesai, jumlah data:", rows.length); // Log akhir
+    
+            if (rows.length === 0) {
+                throw new Error("Booking tidak ditemukan");
+            }
+    
+            return rows;
+        } catch (error) {
+            console.error("Error pada query booking:", error.message); // Log error
+            throw new Error("Error menampilkan booking dengan ID: " + error.message);
+        }
+    };
+    
+
     const updateBookingStatus = async (id, status) => {
         try {
             const sql = "UPDATE booking SET status = ? WHERE id = ?";
@@ -111,4 +143,4 @@ import { query } from "../database/db.js";
     };
 
 
-export {addBooking, getAllBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking, cancelBooking};
+export {addBooking, getAllBooking, getBookingById, updateBookingStatus, deleteBooking, checkExistingBooking, cancelBooking, getBookingByUserId};
