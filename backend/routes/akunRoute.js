@@ -3,6 +3,7 @@ import {
     handleDeleteAkun,
     handleGetAkunById,
     handleGetAkunByName,
+    handleGetAkunByRole,
     handleGetAllAkun,
     handleUpdateAkunFields,
 } from "../controllers/akunController.js";
@@ -17,7 +18,9 @@ router.get("/", authenticateToken, authorizeRoles(1), handleGetAllAkun);
 router.get("/:id", authenticateToken, authorizeRoles(1), handleGetAkunById);
 
 // Route untuk mendapatkan akun berdasarkan nama
-router.get("/akun/by-name", authenticateToken, authorizeRoles(1), handleGetAkunByName);
+router.get("/name/:name", authenticateToken, authorizeRoles(1), handleGetAkunByName);
+
+router.get("/role/:role_id", authenticateToken, handleGetAkunByRole);
 
 // Route untuk memperbarui field pada akun
 router.put(

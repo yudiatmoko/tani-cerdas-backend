@@ -3,7 +3,8 @@ import {
     getAkunByName,
     getAkunById,
     updateAkunFields,
-    deleteAkun
+    deleteAkun,
+    getAkunByRole
 } from "../models/akunModel.js";
 
 // Handler untuk mendapatkan semua akun
@@ -50,29 +51,26 @@ const handleGetAkunById = async (req, res) => {
 
 // Handler untuk mendapatkan akun berdasarkan nama
 const handleGetAkunByName = async (req, res) => {
+    const { name } = req.params.role_id; // ambil parameter nama dari URL
+
     try {
-        const { name } = req.query;
-
-        if (!name) {
-            return res.status(400).json({ error: "Nama harus diberikan" });
-        }
-
-        const result = await getAkunByName(name);
+        const result = await getAkunByName(name); // panggil fungsi untuk mendapatkan akun berdasarkan nama
         if (!result) {
-            return res.status(404).json({ error: "Data akun tidak ditemukan" });
+            return res.status(404).json({ message: `Akun dengan nama "${name}" tidak ditemukan` });
         }
 
         res.status(200).json({
-            message: "Berhasil mendapatkan data akun berdasarkan nama",
+            message: "Berhasil mendapatkan akun berdasarkan nama",
             data: result,
         });
     } catch (error) {
         res.status(500).json({
-            error: "Terjadi kesalahan saat mengambil data akun berdasarkan nama",
-            details: error.message,
+            message: "Gagal mendapatkan akun berdasarkan nama",
+            error: error.message,
         });
     }
 };
+
 
 // Handler untuk memperbarui field akun
 const handleUpdateAkunFields = async (req, res) => {
@@ -126,11 +124,31 @@ const handleDeleteAkun = async (req, res) => {
     }
 }
 
+const handleGetAkunByRole = async (req, res) => {
+    const {role_id} = req.params;
+
+    try {
+        const result = await getAkunByRole(role_id)
+
+        if (!result || result.length === 0) {
+            return res.status(404).json({
+                message: "Data akun tidak ditemukan untuk role tersebut",
+            });
+        }
+        res.status(200).json({
+            message: "Berhasil mendapatkan data akun berdasarkan role",
+            data: result,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Gagal mendapatkan akun berdasarkan role", error: error.message });
+    }
+}
 // Ekspor fungsi handler
 export {
     handleGetAkunById,
     handleGetAllAkun,
     handleGetAkunByName,
     handleUpdateAkunFields,
-    handleDeleteAkun
+    handleDeleteAkun,
+    handleGetAkunByRole
 };

@@ -47,27 +47,22 @@ import { query } from "../database/db.js";
 
     const getAkunByName = async (name) => {
         try {
-            const sql =`
-                SELECT
-                    u.id,
-                    u.name,
-                    u.email
-                FROM
-                    user u
-                LEFT JOIN roles r ON u.id = r.id
-                WHERE u.name = ?
-                `;
-                const rows = await query (sql, [name]);
-
-                if (rows.length === 0){
-                    throw new Error("Akun dengan nama tersebut tidak ada")
-                }
-
-                return rows[0];
+            const sql = `
+                SELECT u.id, u.name, u.email
+                FROM user u
+                WHERE u.name = ?`;
+            const rows = await query(sql, [name]); // eksekusi query dengan nama yang diterima sebagai parameter
+    
+            if (rows.length === 0) {
+                throw new Error("Akun dengan nama tersebut tidak ada");
+            }
+    
+            return rows[0];
         } catch (error) {
-            throw new Error ("Error menampilkan akun dengan Nama: " + error.message)
+            throw new Error("Error menampilkan akun dengan Nama: " + error.message);
         }
     };
+    
 
     const updateAkunFields = async (id, fields) => {
         try {
@@ -117,5 +112,24 @@ import { query } from "../database/db.js";
         }
     }
 
+    const getAkunByRole = async (role_id) => {
+        try {
+            const sql =`
+            SELECT
+                u.id,
+                u.name,
+                u.email,
+                u.experiences
+            FROM
+                user u
+            LEFT JOIN roles r ON u.role_id = r.id
+            WHERE r.id = 2`
+            ;
+            const rows = await query (sql, [role_id]);
+            return rows;
+        } catch (error) {
+            throw new Error("Error menampilkan data berdasarkan role: " + error.message);
+        }
+    }
 
-export {getAllAkun, getAkunById, getAkunByName, updateAkunFields, deleteAkun};
+export {getAllAkun, getAkunById, getAkunByName, updateAkunFields, deleteAkun, getAkunByRole};
