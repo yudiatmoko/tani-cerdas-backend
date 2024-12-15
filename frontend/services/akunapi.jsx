@@ -1,7 +1,7 @@
 import axiosInstance from "./api";
 
 // Mendapatkan semua data akun
-export const fetchAllAkun = async (token) => {
+export const fetchData = async (token) => {
     try {
         const response = await axiosInstance.get("/akun", {
             headers: {
@@ -56,6 +56,20 @@ export const updateAkunFields = async (id, akunData, token) => {
         return response.data; // Mengembalikan pesan sukses dari server
     } catch (error) {
         console.error("Error updating akun fields:", error);
+        throw error;
+    }
+};
+
+export const deleteAkun = async (id, token) => {
+    try {
+        const response = await axiosInstance.delete(`/akun/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data.data
+    } catch (error) {
+        console.error("Error deleting akun by ID:", error);
         throw error;
     }
 };

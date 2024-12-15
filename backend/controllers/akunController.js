@@ -3,6 +3,7 @@ import {
     getAkunByName,
     getAkunById,
     updateAkunFields,
+    deleteAkun
 } from "../models/akunModel.js";
 
 // Handler untuk mendapatkan semua akun
@@ -110,10 +111,26 @@ const handleUpdateAkunFields = async (req, res) => {
     }
 };
 
+const handleDeleteAkun = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const akun = await getAkunById(id);
+        if (!akun) {
+            return res.status(404).json({ message: "Akun tidak ditemukan" });
+        }
+        await deleteAkun(id);
+        res.status(200).json({ message: "Berhasil menghapus akun" });
+    } catch (error) {
+        res.status(500).json({ message: "Gagal menghapus akun", error: error.message });
+    }
+}
+
 // Ekspor fungsi handler
 export {
     handleGetAkunById,
     handleGetAllAkun,
     handleGetAkunByName,
     handleUpdateAkunFields,
+    handleDeleteAkun
 };

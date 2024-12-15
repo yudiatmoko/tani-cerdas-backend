@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    handleDeleteAkun,
     handleGetAkunById,
     handleGetAkunByName,
     handleGetAllAkun,
@@ -25,5 +26,7 @@ router.put(
     authorizeRoles(2, 3), // Role 2: pakar, Role 3: user
     handleUpdateAkunFields
 );
+
+router.delete("/:id", authenticateToken, authorizeRoles(1), handleDeleteAkun)
 
 export default router;

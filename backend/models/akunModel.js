@@ -8,9 +8,11 @@ import { query } from "../database/db.js";
                 u.id,
                 u.name,
                 u.email,
-                u.role_id AS role
+                r.title AS role  -- Menambahkan koma setelah kolom email dan memilih id role
             FROM
-                user u    
+                user u
+            LEFT JOIN roles r ON u.role_id = r.id;
+ 
             `);
 
             return sql;
@@ -104,5 +106,18 @@ import { query } from "../database/db.js";
         }
     };
 
+    const deleteAkun = async (id) => {
+        try {
+            const sql = "DELETE FROM akun WHERE id = ?";
+            const result = await query(sql, [id]);
+            if (result.affectedRows === 0) {
+                throw new Error ("akun tidak ditemukan");
+            }
+            return {id, status:'deleted'};
+        } catch (error) {
+            throw new Error("Error menghapus akun: " + error.message);
+        }
+    }
 
-export {getAllAkun, getAkunById, getAkunByName, updateAkunFields};
+
+export {getAllAkun, getAkunById, getAkunByName, updateAkunFields, deleteAkun};

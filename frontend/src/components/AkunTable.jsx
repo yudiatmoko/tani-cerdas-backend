@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllAkun, updateAkunFields } from "../../services/akunapi";
+import { fetchData, updateAkunFields } from "../../services/akunapi";
 import Alert from "./Alert";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const AkunTable = () => {
     const [data, setData] = useState([]);
@@ -10,14 +11,17 @@ const AkunTable = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
+    const token = localStorage.getItem("token")
 
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
-                const fetchedData = await fetchAllAkun();
+                const fetchedData = await fetchData(token);
+                console.log("Fetched data:", fetchedData);
                 setData(fetchedData);
             } catch (error) {
+                console.error("Error fetching data:", error);
                 setError("Error fetching akun data");
             } finally {
                 setLoading(false);
@@ -26,9 +30,7 @@ const AkunTable = () => {
         getData();
     }, []);
 
-    const handleEdit = (id) => {
-        navigate(`/akun/${id}/edit`); // Arahkan ke halaman edit
-    };
+
 
     return (
         <div className="overflow-x-auto">
@@ -43,9 +45,9 @@ const AkunTable = () => {
                     <thead>
                         <tr className="h-12">
                             <th className="px-3 py-2">ID</th>
-                            <th className="px-3 py-2">Nama</th>
-                            <th className="px-3 py-2">Email</th>
-                            <th className="px-3 py-2">Role</th>
+                            <th className="px-3 py-2 text-left">Nama</th>
+                            <th className="px-3 py-2 text-left">Email</th>
+                            <th className="px-3 py-2 text-left">Role</th>
                             <th className="px-3 py-2">Aksi</th>
                         </tr>
                     </thead>
@@ -62,7 +64,7 @@ const AkunTable = () => {
                                     {akun.email}
                                 </td>
                                 <td className="text-left text-sm font-bold text-gray-900 px-3 py-2">
-                                    {akun.title}
+                                    {akun.role}
                                 </td>
                                 <td className="text-center text-sm font-medium text-gray-700 px-3 py-2">
                                     <div className="flex gap-2 justify-center">
@@ -74,6 +76,12 @@ const AkunTable = () => {
                                         >
                                             Edit
                                         </Button>
+                                        <button
+                                        onClick={() => handleDelete(akun.id)}
+                                        className="bg-red-500 p-2 rounded-md text-white"
+                                        >
+                                        <DeleteIcon fontSize="small" />
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
