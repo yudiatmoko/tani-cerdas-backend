@@ -80,10 +80,31 @@ const handleDeleteEventById = async (req, res) => {
             return res.status(404).json({ message: "Event tidak ditemukan" });
         }
 
+<<<<<<< HEAD
         await deleteEventById(id);
         res.status(200).json({ message: "Berhasil menghapus event" });
     } catch (error) {
         res.status(500).json({ message: "Gagal menghapus event", error: error.message });
+=======
+  try {
+    const newEvent = await addEvent({ title, description, date, location });
+    res.status(201).json({ message: "Event added successfully", data: newEvent });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Menghapus event berdasarkan ID
+export const handleDeleteEventById = async (req, res) => {
+  const eventId = req.params.id;
+
+  try {
+    const result = await deleteEventById(eventId);
+
+    if (!result) {
+      return res.status(404).json({ message: "Event not found" });
+>>>>>>> a4730f12b9a8164d0a2fb7867ba40dda84c53374
     }
 };
 
