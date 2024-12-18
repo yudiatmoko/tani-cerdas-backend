@@ -1,11 +1,15 @@
+import { query } from "../database/db.js";
 import {
     getAllAkun,
     getAkunByName,
     getAkunById,
-    updateAkunFields,
+    updateAkun,
     deleteAkun,
-    getAkunByRole
+    getAkunByRole,
+    getExistingImageUrl
 } from "../models/akunModel.js";
+import { validationResult } from "express-validator";
+import { deleteFile, deleteImageByFilename } from "../utils/file.js";
 
 // Handler untuk mendapatkan semua akun
 const handleGetAllAkun = async (req, res) => {
@@ -49,6 +53,37 @@ const handleGetAkunById = async (req, res) => {
     }
 };
 
+const handleGetAkunImage = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      // Validasi ID
+      if (!id || isNaN(id)) {
+        return res.status(400).json({ error: "ID akun harus diberikan dan berupa angka" });
+      }
+  
+      // Ambil data gambar
+      const image_url = await getExistingImageUrl(id);
+  
+      // Periksa apakah data ditemukan
+      if (!image_url) {
+        return res.status(404).json({ error: "Data akun tidak ditemukan" });
+      }
+  
+      // Kirim respons sukses
+      res.status(200).json({
+        message: "Berhasil mendapatkan data gambar akun",
+        data: { id, image_url },
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: "Terjadi kesalahan saat mengambil data gambar akun berdasarkan ID",
+        details: error.message,
+      });
+    }
+  };
+  
+
 // Handler untuk mendapatkan akun berdasarkan nama
 const handleGetAkunByName = async (req, res) => {
     const { name } = req.params.role_id; // ambil parameter nama dari URL
@@ -73,41 +108,62 @@ const handleGetAkunByName = async (req, res) => {
 
 
 // Handler untuk memperbarui field akun
-const handleUpdateAkunFields = async (req, res) => {
+const handleUpdateAkun = async (req, res) => {
+    const id = req.params.id;
+    console.log("ID yang diterima:", id);
+    const { name, city, job, institute, experiences } = req.body;
+    const image_url = req.file;
+  
     try {
-        const { id } = req.params;
-        const { city, job, image_url, experience } = req.body;
-
-        if (!id) {
-            return res.status(400).json({ error: "ID akun harus diberikan" });
-        }
-
-        const fieldsToUpdate = {};
-        if (city !== undefined) fieldsToUpdate.city = city;
-        if (job !== undefined) fieldsToUpdate.job = job;
-        if (image_url !== undefined) fieldsToUpdate.image_url = image_url;
-        if (experience !== undefined) fieldsToUpdate.experience = experience;
-
-        if (Object.keys(fieldsToUpdate).length === 0) {
-            return res.status(400).json({ error: "Tidak ada field yang diberikan untuk diperbarui" });
-        }
-
-        const result = await updateAkunFields(id, fieldsToUpdate);
-        if (!result) {
-            return res.status(404).json({ error: "Data akun tidak ditemukan" });
-        }
-
-        res.status(200).json({
-            message: "Data berhasil diperbarui",
-            data: result,
-        });
+      // Validasi input
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        if (image_url) deleteFile(image_url.path);
+        return res.status(400).json({ errors: errors.array() });
+      }
+  
+      // Periksa apakah ID valid dan data akun ada
+      const existingImageUrl = await getAkunById(id);
+      console.log("Hasil dari getAkunById:", existingImageUrl);
+  
+      // Cek apakah image_url ada dan bukan null
+      
+  
+      // Update akun
+      const params = [
+        name,
+        city,
+        job,
+        institute,
+        experiences,
+        image_url ? image_url.filename : null,
+        id,
+      ];
+      await updateAkun(params);
+  
+      // Respons sukses
+      return res.status(200).json({
+        status: true,
+        message: "Akun updated successfully",
+        data: {
+          ...req.body,
+          image_url: image_url ? image_url.filename : (null),
+        },
+      });
     } catch (error) {
-        res.status(500).json({
-            error: "Terjadi kesalahan saat memperbarui data akun",
-            details: error.message,
-        });
+      if (image_url) deleteFile(image_url.path);
+      console.error(error);
+      return res.status(500).json({
+        status: false,
+        message: "Internal server error",
+        details: error.message,
+      });
     }
-};
+  };
+  
+  
+  
+
 
 const handleDeleteAkun = async (req, res) => {
     const {id} = req.params;
@@ -148,7 +204,8 @@ export {
     handleGetAkunById,
     handleGetAllAkun,
     handleGetAkunByName,
-    handleUpdateAkunFields,
+    handleUpdateAkun,
     handleDeleteAkun,
-    handleGetAkunByRole
+    handleGetAkunByRole,
+    handleGetAkunImage
 };

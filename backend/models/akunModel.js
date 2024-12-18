@@ -27,7 +27,13 @@ import { query } from "../database/db.js";
                 SELECT
                     u.id,
                     u.name,
-                    u.email
+                    u.email,
+                    u.city,
+                    u.job,
+                    u.experiences,
+                    u.image_url,
+                    u.institute
+                    
                 FROM
                     user u
                 LEFT JOIN roles r ON u.id = r.id
@@ -64,44 +70,21 @@ import { query } from "../database/db.js";
     };
     
 
-    const updateAkunFields = async (id, fields) => {
-        try {
-            // Filter fields untuk hanya mengupdate kolom tertentu jika nilainya null
-            const validFields = ['city', 'job', 'image_url', 'experience'];
-            const setClause = validFields
-                .filter(key => fields[key] !== undefined)
-                .map(key => `${key} = ?`)
-                .join(', ');
-
-            if (!setClause) {
-                throw new Error("Tidak ada field yang valid untuk diperbarui");
-            }
-
-            const values = validFields
-                .filter(key => fields[key] !== undefined)
-                .map(key => fields[key]);
-
+    const updateAkun = async (params) => {
+        
             const sql = `
-                UPDATE user
-                SET ${setClause}
-                WHERE id = ? AND (${validFields.map(key => `${key} IS NULL`).join(' OR ')})
+                UPDATE user 
+                SET name = ?, city = ?, job = ?, image_url = ?, experiences = ?, institute = ?
+                WHERE id = ?
             `;
-
-            const result = await query(sql, [...values, id]);
-
-            if (result.affectedRows === 0) {
-                throw new Error("Tidak ada data yang diperbarui. Pastikan ID dan kondisi null sesuai.");
-            }
-
-            return { message: "Data berhasil diperbarui", updatedId: id };
-        } catch (error) {
-            throw new Error("Error memperbarui data akun: " + error.message);
-        }
+        return query(sql, params);
     };
+    
+    
 
     const deleteAkun = async (id) => {
         try {
-            const sql = "DELETE FROM akun WHERE id = ?";
+            const sql = "DELETE FROM user WHERE id = ?";
             const result = await query(sql, [id]);
             if (result.affectedRows === 0) {
                 throw new Error ("akun tidak ditemukan");
@@ -111,6 +94,24 @@ import { query } from "../database/db.js";
             throw new Error("Error menghapus akun: " + error.message);
         }
     }
+
+    const getExistingImageUrl = async (id) => {
+        try {
+          const sql = "SELECT image_url FROM user WHERE id = ?";
+          const result = await query(sql, [id]);
+      
+          // Periksa apakah data ditemukan
+          if (result.length === 0) {
+            throw new Error("Akun tidak ditemukan");
+          }
+      
+          // Kembalikan URL gambar
+          return result[0].image_url;
+        } catch (error) {
+          throw new Error("Error mendapatkan link image: " + error.message);
+        }
+      };
+      
 
     const getAkunByRole = async (role_id) => {
         try {
@@ -132,4 +133,4 @@ import { query } from "../database/db.js";
         }
     }
 
-export {getAllAkun, getAkunById, getAkunByName, updateAkunFields, deleteAkun, getAkunByRole};
+export {getAllAkun, getAkunById, getAkunByName, updateAkun, deleteAkun, getAkunByRole, getExistingImageUrl};

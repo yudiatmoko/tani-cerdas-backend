@@ -106,65 +106,65 @@ const handleGetCourseById = async (req, res) => {
   }
 };
 
-const handleUpdateCourseById = async (req, res) => {
-  const id = req.params.id;
-  const { title, description, video_url, duration, level } = req.body;
-  const image_url = req.file;
+  const handleUpdateCourseById = async (req, res) => {
+    const id = req.params.id;
+    const { title, description, video_url, duration, level } = req.body;
+    const image_url = req.file;
 
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        if (image_url) deleteFile(image_url.path);
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const existingCourse = await getCourseById(id);
+      if (existingCourse.length === 0) {
+        if (image_url) deleteFile(image_url.path);
+        return res.status(404).json({ message: "Course not found" });
+      }
+
+      const duplicateTitle = await query("SELECT * FROM course WHERE title = ?", [
+        title,
+      ]);
+      if (duplicateTitle.length > 0) {
+        if (image_url) deleteFile(image_url.path);
+        return res
+          .status(400)
+          .json({ message: "Course with this title already exists" });
+      }
+
+      if (image_url) {
+        deleteImageByFilename(existingCourse[0].image_url);
+      }
+
+      const params = [
+        title,
+        description,
+        video_url,
+        image_url ? image_url.filename : existingCourse[0].image_url,
+        duration,
+        level,
+        id,
+      ];
+      await updateCourse(params);
+      return res.status(200).json({
+        status: true,
+        message: "Course updated successfully",
+        data: {
+          ...req.body,
+          image_url: image_url ? image_url.filename : existingCourse[0].image_url,
+        },
+      });
+    } catch (error) {
       if (image_url) deleteFile(image_url.path);
-      return res.status(400).json({ errors: errors.array() });
+      console.error(error);
+      return res.status(500).json({
+        status: false,
+        message: "Internal server error",
+      });
     }
-
-    const existingCourse = await getCourseById(id);
-    if (existingCourse.length === 0) {
-      if (image_url) deleteFile(image_url.path);
-      return res.status(404).json({ message: "Course not found" });
-    }
-
-    const duplicateTitle = await query("SELECT * FROM course WHERE title = ?", [
-      title,
-    ]);
-    if (duplicateTitle.length > 0) {
-      if (image_url) deleteFile(image_url.path);
-      return res
-        .status(400)
-        .json({ message: "Course with this title already exists" });
-    }
-
-    if (image_url) {
-      deleteImageByFilename(existingCourse[0].image_url);
-    }
-
-    const params = [
-      title,
-      description,
-      video_url,
-      image_url ? image_url.filename : existingCourse[0].image_url,
-      duration,
-      level,
-      id,
-    ];
-    await updateCourse(params);
-    return res.status(200).json({
-      status: true,
-      message: "Course updated successfully",
-      data: {
-        ...req.body,
-        image_url: image_url ? image_url.filename : existingCourse[0].image_url,
-      },
-    });
-  } catch (error) {
-    if (image_url) deleteFile(image_url.path);
-    console.error(error);
-    return res.status(500).json({
-      status: false,
-      message: "Internal server error",
-    });
-  }
-};
+  };
 
 const handleDeleteCourseById = async (req, res) => {
   const id = req.params.id;

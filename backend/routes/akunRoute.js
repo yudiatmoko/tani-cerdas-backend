@@ -5,9 +5,12 @@ import {
     handleGetAkunByName,
     handleGetAkunByRole,
     handleGetAllAkun,
-    handleUpdateAkunFields,
+    handleUpdateAkun,
+    handleGetAkunImage
 } from "../controllers/akunController.js";
 import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware.js";
+import { body } from "express-validator";
+import uploadMiddleware from "../middlewares/uploadFilesMiddleware.js";
 
 const router = express.Router();
 
@@ -15,19 +18,45 @@ const router = express.Router();
 router.get("/", authenticateToken, authorizeRoles(1), handleGetAllAkun);
 
 // Route untuk mendapatkan akun berdasarkan ID
-router.get("/:id", authenticateToken, authorizeRoles(1), handleGetAkunById);
 
-// Route untuk mendapatkan akun berdasarkan nama
+
+
 router.get("/name/:name", authenticateToken, authorizeRoles(1), handleGetAkunByName);
 
 router.get("/role/:role_id", authenticateToken, handleGetAkunByRole);
 
+// Route untuk mendapatkan gambar akun berdasarkan ID
+router.get(
+    "/image/:id",
+    authenticateToken, // Middleware autentikasi
+    (req, res, next) => {
+      // Middleware validasi ID
+      const { id } = req.params;
+      if (!id || isNaN(id)) {
+        return res.status(400).json({ error: "ID harus diberikan dan berupa angka" });
+      }
+      next();
+    },
+    handleGetAkunImage // Controller untuk mendapatkan data gambar akun
+  );
+
+// Route untuk mendapatkan akun berdasarkan nama
+router.get("/:id", authenticateToken, handleGetAkunById);
 // Route untuk memperbarui field pada akun
 router.put(
-    "/akun/:id",
-    authenticateToken,
-    authorizeRoles(2, 3), // Role 2: pakar, Role 3: user
-    handleUpdateAkunFields
+    "/:id",  // Parameter ID pada URL
+    authenticateToken,  // Middleware untuk autentikasi token
+    uploadMiddleware,   // Middleware untuk mengunggah file (gambar)
+    [
+        body("name").notEmpty().withMessage("Name is required"),
+        body("city").notEmpty().withMessage("City is required"),
+        body("job").notEmpty().withMessage("Job is required"),
+        body("institute").notEmpty().withMessage("Institute is required"),
+        body("experiences")
+            .isInt({ min: 0 })
+            .withMessage("Experience must be a positive integer"),
+    ],
+    handleUpdateAkun  // Controller untuk menangani pembaruan akun
 );
 
 router.delete("/:id", authenticateToken, authorizeRoles(1), handleDeleteAkun)

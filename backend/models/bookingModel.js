@@ -66,7 +66,9 @@ import { query } from "../database/db.js";
             console.log("Memulai query untuk user_id:", user_id); // Log awal
             const sql = `
                 SELECT 
-                    b.id, 
+                    b.id,
+                    u1.id,
+                    u2.id, 
                     u1.name AS user_name, 
                     u2.name AS pakar_name, 
                     b.date, 
