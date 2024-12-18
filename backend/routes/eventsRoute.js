@@ -1,62 +1,21 @@
 import express from "express";
-import {
-  handleAddEvent,
-  handleDeleteEventById,
-  handleGetAllEvents,
-  handleGetEventById,
-  handleUpdateEventById,
-} from "../controllers/eventController.js";
-import { body } from "express-validator";
-import {
-  authenticateToken,
-  authorizeRoles,
-} from "../middlewares/authMiddleware.js";
-import uploadMiddleware from "../middlewares/uploadFilesMiddleware.js";
+import { 
+    handleCreateEvent, 
+    handleGetAllEvents, 
+    handleGetEventById, 
+    handleUpdateEventById, 
+    handleDeleteEventById 
+} from "../controllers/eventController.js";  // Ensure the correct import
+
+import { authenticateToken, authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Mendapatkan semua event
-router.get("/", authenticateToken, handleGetAllEvents);
-
-// Menambahkan event baru
-router.post(
-  "/",
-  authenticateToken,
-  authorizeRoles(1, 2), // Hanya role 1 dan 2 yang diizinkan
-  uploadMiddleware,
-  [
-    body("title").notEmpty().withMessage("Title is required"),
-    body("description").notEmpty().withMessage("Description is required"),
-    body("date").notEmpty().withMessage("Date is required"),
-    body("location").notEmpty().withMessage("Location is required"),
-  ],
-  handleAddEvent
-);
-
-// Mendapatkan event berdasarkan ID
+// Use handleCreateEvent instead of handleAddEvent
+router.post("/", authenticateToken, authorizeRoles(1, 2), handleCreateEvent);  // Fixed here
+router.get("/", authenticateToken, authorizeRoles(1, 2), handleGetAllEvents);
 router.get("/:id", authenticateToken, handleGetEventById);
-
-// Memperbarui event berdasarkan ID
-router.put(
-  "/:id",
-  authenticateToken,
-  authorizeRoles(1, 2),
-  uploadMiddleware,
-  [
-    body("title").notEmpty().withMessage("Title is required"),
-    body("description").notEmpty().withMessage("Description is required"),
-    body("date").notEmpty().withMessage("Date is required"),
-    body("location").notEmpty().withMessage("Location is required"),
-  ],
-  handleUpdateEventById
-);
-
-// Menghapus event berdasarkan ID
-router.delete(
-  "/:id",
-  authenticateToken,
-  authorizeRoles(1, 2),
-  handleDeleteEventById
-);
+router.put("/:id", authenticateToken, authorizeRoles(1, 2), handleUpdateEventById);
+router.delete("/:id", authenticateToken, authorizeRoles(1, 2), handleDeleteEventById);
 
 export default router;
