@@ -12,12 +12,17 @@ if (!fs.existsSync(fileDir)) {
   fs.mkdirSync(fileDir, { recursive: true });
 }
 
+const tempDir = path.join(__dirname, "../../backend/tmp");
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, fileDir);
+    cb(null, tempDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = new Date().getTime().toString();
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
