@@ -220,7 +220,7 @@ const UpdateCourse = () => {
         ) : (
           <div className="mt-4">
             <img
-              src={`http://localhost:3002/images/${previousImage}`}
+              src={`https://tani-cerdas-backend.vercel.app/images/${previousImage}`}
               alt="Preview"
               className="max-h-60 object-cover rounded-md"
             />
