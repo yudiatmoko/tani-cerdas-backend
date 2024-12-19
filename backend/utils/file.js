@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const fileDir = path.join(__dirname, "/backend/public/images/");
+const fileDir = path.join(__dirname, "/public/images/");
 
 function deleteFile(filePath) {
   fs.unlink(filePath, (err) => {
